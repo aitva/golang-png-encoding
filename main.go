@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/disintegration/imaging"
+	"github.com/foobaz/lossypng/lossypng"
 )
 
 func usage() {
@@ -41,18 +42,22 @@ func main() {
 		fmt.Println("fail to open image:", err)
 		os.Exit(1)
 	}
-	fmt.Printf("\nsize %s:\n", imageSizeToString(img))
+	fmt.Printf("\n%s:\n", describeImage(img))
 	testEncodings(img)
 
-	img = imaging.Resize(img, 1024, 0, imaging.Box)
+	img = imaging.Resize(img, 1024, 0, imaging.Lanczos)
 
-	fmt.Printf("\nsize %s:\n", imageSizeToString(img))
+	fmt.Printf("\n%s:\n", describeImage(img))
 	testEncodings(img)
+
+	lossy := lossypng.Compress(img, lossypng.NoConversion, 256)
+	fmt.Printf("\nlossypng %s:\n", describeImage(lossy))
+	testEncodings(lossy)
 }
 
-func imageSizeToString(img image.Image) string {
+func describeImage(img image.Image) string {
 	point := img.Bounds().Size()
-	return fmt.Sprintf("%dx%dpx", point.X, point.Y)
+	return fmt.Sprintf("%T of %dx%dpx", img, point.X, point.Y)
 }
 
 func compToString(c png.CompressionLevel) string {

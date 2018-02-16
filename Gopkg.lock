@@ -9,6 +9,12 @@
 
 [[projects]]
   branch = "master"
+  name = "github.com/foobaz/lossypng"
+  packages = ["lossypng"]
+  revision = "b2e79a7cd5f1a8f7ddb5370af26b836e5eed83bd"
+
+[[projects]]
+  branch = "master"
   name = "golang.org/x/image"
   packages = [
     "bmp",
@@ -20,6 +26,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "af9209537fd3046dd06dbbfa52ce92b8d1af60ae4d49616d25942d94d82fe7f8"
+  inputs-digest = "909bbcf44f184934816ced11b2d4c29758b594956076e3c30516c0854b867cd5"
   solver-name = "gps-cdcl"
   solver-version = 1
