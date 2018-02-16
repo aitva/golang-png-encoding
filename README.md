@@ -32,6 +32,6 @@ lossypng *image.NRGBA of 1024x736px:
 
 ## Summary
 
-The original image comes with a color palette, which greatly reduce its size.
-Reducing the image with `imaging` removes the color palette and double the image size.
-Passing the reduced image to `lossypng` helps but we don't even get close to the original size.
+- The original image comes with a color palette, which greatly reduce its size.
+- Reducing the image with `imaging` removes the color palette and double the image size.
+- Passing the reduced image to `lossypng` helps but we don't even get close to the original size.
