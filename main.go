@@ -6,6 +6,8 @@ import (
 	"image"
 	"image/png"
 	"os"
+
+	"github.com/disintegration/imaging"
 )
 
 func usage() {
@@ -39,25 +41,49 @@ func main() {
 		fmt.Println("fail to open image:", err)
 		os.Exit(1)
 	}
+	fmt.Printf("\nsize %s:\n", imageSizeToString(img))
+	testEncodings(img)
+
+	img = imaging.Resize(img, 1024, 0, imaging.Box)
+
+	fmt.Printf("\nsize %s:\n", imageSizeToString(img))
 	testEncodings(img)
 }
 
+func imageSizeToString(img image.Image) string {
+	point := img.Bounds().Size()
+	return fmt.Sprintf("%dx%dpx", point.X, point.Y)
+}
+
+func compToString(c png.CompressionLevel) string {
+	str := "InvalidCompression"
+	switch c {
+	case png.DefaultCompression:
+		str = "DefaultCompression"
+	case png.BestSpeed:
+		str = "BestSpeed"
+	case png.BestCompression:
+		str = "BestCompression"
+	}
+	return str
+}
+
 func testEncodings(img image.Image) {
-	compressions := map[string]png.CompressionLevel{
-		"DefaultCompression": png.DefaultCompression,
-		"BestSpeed":          png.BestSpeed,
-		"BestCompression":    png.BestCompression,
+	compressions := []png.CompressionLevel{
+		png.DefaultCompression,
+		png.BestSpeed,
+		png.BestCompression,
 	}
 	var buf bytes.Buffer
 	var enc png.Encoder
-	for k, v := range compressions {
-		enc.CompressionLevel = v
+	for _, c := range compressions {
+		enc.CompressionLevel = c
 		err := enc.Encode(&buf, img)
 		if err != nil {
-			fmt.Printf("%q: %v\n", k, err)
+			fmt.Printf("%q: %v\n", compToString(c), err)
 			continue
 		}
-		fmt.Printf("%q: image is %d bytes\n", k, buf.Len())
+		fmt.Printf("%q: image is %d bytes\n", compToString(c), buf.Len())
 		buf.Reset()
 	}
 }
