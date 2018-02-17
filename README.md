@@ -6,8 +6,8 @@ This repo test PNG compression parameters for Golang's `image/png` library.
 
 You need [dep](https://github.com/golang/dep) and [go](https://github.com/golang/go) install on your machine.
 
-To download the dependencies: `dep ensure`
-To build & run the program: `go run main.go apercu-slack.png`
+- To download the dependencies: `dep ensure`
+- To build & run the program: `go run main.go apercu-slack.png`
 
 Example output:
 
