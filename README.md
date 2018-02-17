@@ -13,25 +13,18 @@ Example output:
 
 ```
 original image is 26297 bytes
-
-*image.Paletted of 1280x920px:
-"DefaultCompression": image is 31368 bytes
-"BestSpeed": image is 36923 bytes
-"BestCompression": image is 27279 bytes
-
-*image.NRGBA of 1024x736px:
-"DefaultCompression": image is 86268 bytes
-"BestSpeed": image is 91306 bytes
-"BestCompression": image is 84924 bytes
-
-lossypng *image.NRGBA of 1024x736px:
-"DefaultCompression": image is 39282 bytes
-"BestSpeed": image is 44420 bytes
-"BestCompression": image is 37317 bytes
+decoded image: *image.Paletted, 1280x920px and 31368 bytes
+resized image: *image.NRGBA, 1024x736px and 47339 bytes
+indexed image: *image.Paletted, 1024x736px and 23617 bytes
+compressed image: *image.NRGBA, 1024x736px and 80984 bytes
+indexed image: *image.Paletted, 1024x736px and 31352 bytes
 ```
 
 ## Summary
 
-- The original image comes with a color palette, which greatly reduce its size.
-- Reducing the image with `imaging` removes the color palette and double the image size.
-- Passing the reduced image to `lossypng` helps but we don't even get close to the original size.
+- `png.DefaultCompression` gives the best result
+- original image comes with a custom color palette
+- reduced image lose the color palette
+- image reduced with nearest neighbor have a smaller size
+- `lossypng` does not help to get back to the original size
+- applying the original color palette to the reduced image is the best 💖

@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"image"
+	"image/draw"
 	"image/png"
 	"os"
 
@@ -42,53 +43,27 @@ func main() {
 		fmt.Println("fail to open image:", err)
 		os.Exit(1)
 	}
-	fmt.Printf("\n%s:\n", describeImage(img))
-	testEncodings(img)
+	fmt.Println("decoded image:", describeImage(img))
 
-	img = imaging.Resize(img, 1024, 0, imaging.Lanczos)
+	res := imaging.Resize(img, 1024, 0, imaging.NearestNeighbor)
+	fmt.Println("resized image:", describeImage(res))
 
-	fmt.Printf("\n%s:\n", describeImage(img))
-	testEncodings(img)
+	pimg := img.(*image.Paletted)
+	paletted := image.NewPaletted(res.Bounds(), pimg.Palette)
+	draw.Src.Draw(paletted, paletted.Bounds(), res, res.Bounds().Min)
+	fmt.Println("indexed image:", describeImage(paletted))
 
-	lossy := lossypng.Compress(img, lossypng.NoConversion, 256)
-	fmt.Printf("\nlossypng %s:\n", describeImage(lossy))
-	testEncodings(lossy)
+	lossy := lossypng.Compress(res, lossypng.NoConversion, 20)
+	fmt.Println("compressed image:", describeImage(lossy))
+
+	paletted = image.NewPaletted(lossy.Bounds(), pimg.Palette)
+	draw.Src.Draw(paletted, paletted.Bounds(), lossy, lossy.Bounds().Min)
+	fmt.Println("indexed image:", describeImage(paletted))
 }
 
 func describeImage(img image.Image) string {
-	point := img.Bounds().Size()
-	return fmt.Sprintf("%T of %dx%dpx", img, point.X, point.Y)
-}
-
-func compToString(c png.CompressionLevel) string {
-	str := "InvalidCompression"
-	switch c {
-	case png.DefaultCompression:
-		str = "DefaultCompression"
-	case png.BestSpeed:
-		str = "BestSpeed"
-	case png.BestCompression:
-		str = "BestCompression"
-	}
-	return str
-}
-
-func testEncodings(img image.Image) {
-	compressions := []png.CompressionLevel{
-		png.DefaultCompression,
-		png.BestSpeed,
-		png.BestCompression,
-	}
 	var buf bytes.Buffer
-	var enc png.Encoder
-	for _, c := range compressions {
-		enc.CompressionLevel = c
-		err := enc.Encode(&buf, img)
-		if err != nil {
-			fmt.Printf("%q: %v\n", compToString(c), err)
-			continue
-		}
-		fmt.Printf("%q: image is %d bytes\n", compToString(c), buf.Len())
-		buf.Reset()
-	}
+	png.Encode(&buf, img)
+	point := img.Bounds().Size()
+	return fmt.Sprintf("%T, %dx%dpx and %d bytes", img, point.X, point.Y, buf.Len())
 }

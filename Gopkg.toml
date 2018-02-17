@@ -27,3 +27,7 @@
 [[constraint]]
   branch = "master"
   name = "github.com/foobaz/lossypng"
+
+[[constraint]]
+  name = "github.com/esimov/colorquant"
+  version = "1.0.0"

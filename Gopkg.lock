@@ -8,6 +8,12 @@
   version = "v1.3.0"
 
 [[projects]]
+  name = "github.com/esimov/colorquant"
+  packages = ["."]
+  revision = "26cc7dd0f3187028bef64eb8ffac252661ab54ca"
+  version = "v1.0.0"
+
+[[projects]]
   branch = "master"
   name = "github.com/foobaz/lossypng"
   packages = ["lossypng"]
@@ -26,6 +32,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "909bbcf44f184934816ced11b2d4c29758b594956076e3c30516c0854b867cd5"
+  inputs-digest = "798690ff5e5b2c7c67ffc0733957e11d4989a5c98f9ab9026b3991de89fc5e83"
   solver-name = "gps-cdcl"
   solver-version = 1
