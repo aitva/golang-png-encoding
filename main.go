@@ -12,6 +12,8 @@ import (
 	"github.com/foobaz/lossypng/lossypng"
 )
 
+const folder = "output"
+
 func usage() {
 	fmt.Printf("usage: %s image.png\n", os.Args[0])
 	fmt.Printf("\nRead a PNG image and try different compression algorithm on it.\n")
@@ -48,11 +50,16 @@ func main() {
 
 	res := imaging.Resize(img, 1024, 0, imaging.NearestNeighbor)
 	fmt.Println("resized image:", describeImage(res))
+	err = saveImage(res, folder, "reduced.png")
+	if err != nil {
+		fmt.Println("fail to save image:", err)
+		os.Exit(1)
+	}
 
 	tmp := image.NewPaletted(res.Bounds(), paletted.Palette)
 	draw.Src.Draw(tmp, tmp.Bounds(), res, res.Bounds().Min)
 	fmt.Println("indexed image:", describeImage(tmp))
-	err = saveImage(tmp, "output", "indexed.png")
+	err = saveImage(tmp, folder, "indexed.png")
 	if err != nil {
 		fmt.Println("fail to save image:", err)
 		os.Exit(1)
@@ -60,7 +67,7 @@ func main() {
 
 	lossy := lossypng.Compress(res, lossypng.NoConversion, 20)
 	fmt.Println("compressed image:", describeImage(lossy))
-	err = saveImage(tmp, "output", "lossy.png")
+	err = saveImage(tmp, folder, "lossy.png")
 	if err != nil {
 		fmt.Println("fail to save image:", err)
 		os.Exit(1)
@@ -69,7 +76,7 @@ func main() {
 	tmp = image.NewPaletted(lossy.Bounds(), paletted.Palette)
 	draw.Src.Draw(tmp, tmp.Bounds(), lossy, lossy.Bounds().Min)
 	fmt.Println("indexed image:", describeImage(tmp))
-	err = saveImage(tmp, "output", "lossy-indexed.png")
+	err = saveImage(tmp, folder, "lossy-indexed.png")
 	if err != nil {
 		fmt.Println("fail to save image:", err)
 		os.Exit(1)

@@ -31,9 +31,10 @@ indexed image: *image.Paletted, 1024x736px and 31352 bytes
 
 ## Images
 
-                Encoding                  |                       Image
-------------------------------------------|-----------------------------------------------
-            Reduced & Indexed             |  ![Grzzly Slack Indexed](output/indexed.png)
-             Reduced & Lossy              |    ![Gryzzly Slack Lossy](output/lossy.png)
-        Reduced, Lossy & Indexed          | ![Gryzzly Slack Lossy Indexed](output/lossy-indexed.png)
+Encoding | Image
+---------|------
+Reduced | ![Gryzzly Slack Reduced](output/reduced.png)
+Reduced & Indexed | ![Grzzly Slack Indexed](output/indexed.png)
+Reduced & Lossy | ![Gryzzly Slack Lossy](output/lossy.png)
+Reduced, Lossy & Indexed | ![Gryzzly Slack Lossy Indexed](output/lossy-indexed.png)
 
