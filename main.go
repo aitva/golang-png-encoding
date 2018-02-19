@@ -48,7 +48,7 @@ func main() {
 	fmt.Println("decoded image:", describeImage(img))
 	paletted := img.(*image.Paletted)
 
-	res := imaging.Resize(img, 1024, 0, imaging.NearestNeighbor)
+	res := imaging.Resize(img, 1024, 0, imaging.Box)
 	fmt.Println("resized image:", describeImage(res))
 	err = saveImage(res, folder, "reduced.png")
 	if err != nil {

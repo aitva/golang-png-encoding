@@ -25,7 +25,11 @@ indexed image: *image.Paletted, 1024x736px and 31352 bytes
 - `png.DefaultCompression` gives the best result
 - original image comes with a custom color palette
 - reduced image lose the color palette
-- image reduced with nearest neighbor have a smaller size
+- image reduced with nearest neighbor have a smaller size:
+    - indexed image with box: 26174 bytes
+    - indexed image with nearest neighbor: 23617 bytes
+    - compressed image with box: 98563 bytes
+    - compressed image with nearest neighbor: 80984 bytes
 - `lossypng` does not help to get back to the original size
 - applying the original color palette to the reduced image is the best :purple_heart:
 
