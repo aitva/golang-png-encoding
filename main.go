@@ -44,21 +44,36 @@ func main() {
 		os.Exit(1)
 	}
 	fmt.Println("decoded image:", describeImage(img))
+	paletted := img.(*image.Paletted)
 
 	res := imaging.Resize(img, 1024, 0, imaging.NearestNeighbor)
 	fmt.Println("resized image:", describeImage(res))
 
-	pimg := img.(*image.Paletted)
-	paletted := image.NewPaletted(res.Bounds(), pimg.Palette)
-	draw.Src.Draw(paletted, paletted.Bounds(), res, res.Bounds().Min)
-	fmt.Println("indexed image:", describeImage(paletted))
+	tmp := image.NewPaletted(res.Bounds(), paletted.Palette)
+	draw.Src.Draw(tmp, tmp.Bounds(), res, res.Bounds().Min)
+	fmt.Println("indexed image:", describeImage(tmp))
+	err = saveImage(tmp, "output", "indexed.png")
+	if err != nil {
+		fmt.Println("fail to save image:", err)
+		os.Exit(1)
+	}
 
 	lossy := lossypng.Compress(res, lossypng.NoConversion, 20)
 	fmt.Println("compressed image:", describeImage(lossy))
+	err = saveImage(tmp, "output", "lossy.png")
+	if err != nil {
+		fmt.Println("fail to save image:", err)
+		os.Exit(1)
+	}
 
-	paletted = image.NewPaletted(lossy.Bounds(), pimg.Palette)
-	draw.Src.Draw(paletted, paletted.Bounds(), lossy, lossy.Bounds().Min)
-	fmt.Println("indexed image:", describeImage(paletted))
+	tmp = image.NewPaletted(lossy.Bounds(), paletted.Palette)
+	draw.Src.Draw(tmp, tmp.Bounds(), lossy, lossy.Bounds().Min)
+	fmt.Println("indexed image:", describeImage(tmp))
+	err = saveImage(tmp, "output", "lossy-indexed.png")
+	if err != nil {
+		fmt.Println("fail to save image:", err)
+		os.Exit(1)
+	}
 }
 
 func describeImage(img image.Image) string {
@@ -66,4 +81,24 @@ func describeImage(img image.Image) string {
 	png.Encode(&buf, img)
 	point := img.Bounds().Size()
 	return fmt.Sprintf("%T, %dx%dpx and %d bytes", img, point.X, point.Y, buf.Len())
+}
+
+func saveImage(img image.Image, folder, filename string) error {
+	_, err := os.Lstat(folder)
+	if err != nil {
+		err = os.Mkdir(folder, 0775)
+		if err != nil {
+			return err
+		}
+	}
+
+	path := folder + string(os.PathSeparator) + filename
+	f, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+
+	err = png.Encode(f, img)
+	f.Close()
+	return err
 }

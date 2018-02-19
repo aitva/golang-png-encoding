@@ -27,4 +27,13 @@ indexed image: *image.Paletted, 1024x736px and 31352 bytes
 - reduced image lose the color palette
 - image reduced with nearest neighbor have a smaller size
 - `lossypng` does not help to get back to the original size
-- applying the original color palette to the reduced image is the best 💖
+- applying the original color palette to the reduced image is the best :purple_heart:
+
+## Images
+
+                Encoding                  |                       Image
+------------------------------------------|-----------------------------------------------
+            Reduced & Indexed             |  ![Grzzly Slack Indexed](output/indexed.png)
+             Reduced & Lossy              |    ![Gryzzly Slack Lossy](output/lossy.png)
+        Reduced, Lossy & Indexed          | ![Gryzzly Slack Lossy Indexed](output/lossy-indexed.png)
+
